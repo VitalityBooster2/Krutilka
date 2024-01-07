@@ -1,0 +1,23 @@
+﻿<Window  x:Class="Sinus.MainWindow"
+        x:Name="mWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sinus"
+        xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
+        mc:Ignorable="d"
+         
+        Title="MainWindow" Height="1080" Width="1920">
+    <Grid x:Name="mainLayout">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Canvas  AllowDrop="True" x:Name="canvas" Tag="canvas">
+            <Button Content="Clear" Grid.Column="0" Width="100" Height="50" Margin="500,1000,0,0" Click="ClearGraph"/>
+        </Canvas>
+        <ScottPlot:WpfPlot Grid.Column="1" x:Name="plot"/>
+    </Grid>
+</Window>
