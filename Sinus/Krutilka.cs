@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Channels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -38,7 +39,7 @@ namespace Sinus
         public double ActualAngle
         {
             get { return actualAngle; }
-            private set { actualAngle = value; text.Content = Math.Round(actualAngle, 0); }
+            private set { actualAngle = value; text.Content = Math.Round(actualAngle,0); }
         }
 
 
@@ -83,8 +84,8 @@ namespace Sinus
 
             double deltaAngle = angle - lastAngle;
 
-            Console.WriteLine(deltaAngle);
-           
+            if(Math.Abs(deltaAngle) < 300)
+
             ActualAngle -= deltaAngle;
 
 

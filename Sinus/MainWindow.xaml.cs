@@ -1,5 +1,10 @@
-﻿using ScottPlot.Plottable;
+﻿using OxyPlot;
+using OxyPlot.Annotations;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using ScottPlot.Plottable;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
@@ -7,34 +12,43 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Ellipse = System.Windows.Shapes.Ellipse;
+
 namespace Sinus
 {
 
-
+    
 
     public partial class MainWindow : Window
     {
 
+        private TwoColorVerticalLine function; 
+        private Point mousePos;
+        private Krutilka krutilka;
+        private PlotModel model = new PlotModel() { Title = "Plot"};
 
-
-
-        Point mousePos;
-        Krutilka krutilka;
 
         public MainWindow()
         {
             InitializeComponent();
-            krutilka = new Krutilka(new Ellipse() { Margin = new Thickness(500, 300, 0, 0), Stroke = Brushes.Black, Width = 200, Height = 200 }, new Button() { Width = 50, Height = 50 });
+            krutilka = new Krutilka(new Ellipse() { 
+                Margin = new Thickness(500, 300, 0, 0), 
+                Stroke = Brushes.Black, 
+                Width = 200, Height = 200 }, 
+                new Button() { Width = 50, Height = 50 });
+
             krutilka.SetButtonStyle(FindResource("RoundedButton") as Style);
+
             krutilka.AddToForm(canvas);
 
-            plot.Plot.AddHorizontalLine(0);
-            plot.Plot.AddVerticalLine(0);
-
+            function = new TwoColorVerticalLine() {Color = OxyColors.Black};
             
 
+            model.Series.Add(function);
+            function.Limit = 0;
 
 
+            model.Annotations.Add(new LineAnnotation() { X = 0, Y = 0 , StrokeThickness = 2, Color = OxyColors.Black, Type = LineAnnotationType.Vertical});
+            model.Annotations.Add(new LineAnnotation() { X = 0, Y = 0 , StrokeThickness = 2, Color = OxyColors.Black, Type = LineAnnotationType.Horizontal});
 
 
 
@@ -54,31 +68,37 @@ namespace Sinus
                 mousePos = e.GetPosition((IInputElement)sender);
 
 
-            plot.Plot.Add(new MarkerPlot() { X = 0, Y = Math.Sin(0), Color = System.Drawing.Color.Red });
+
 
             if (krutilka.IsCaptured)
             {
-
                 krutilka.Update();
+
                 var x = krutilka.ActualAngle.ConvertToRadians();
                 var y = Math.Sin(krutilka.ActualAngle.ConvertToRadians());
 
-                if (x > 0)
 
-                    plot.Plot.Add(new MarkerPlot() { X = x, Y = y, Color = System.Drawing.Color.Green, MarkerSize = 2 });
-                else plot.Plot.Add(new MarkerPlot() { X = x, Y = y, Color = System.Drawing.Color.Blue, MarkerSize = 2 });
+                function.Points.Add(new (x,y));
+
+                
+                plot.Model = model;
+                
+                plot.InvalidatePlot();
 
 
             }
+            
 
 
-            plot.Refresh();
 
         }
 
         private void ClearGraph(object sender, RoutedEventArgs args)
         {
-            plot.Plot.Clear();
+            plot.Model = new PlotModel();
+            model = new PlotModel();
+            function = new TwoColorVerticalLine();
+            
         }
 
         private void Update(object sender, RoutedEventArgs e)

@@ -5,10 +5,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sinus"
-        xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
          
         Title="MainWindow" Height="1080" Width="1920">
+
+
+    <Window.DataContext>
+        <local:PlotViewModel/>
+    </Window.DataContext>
     <Grid x:Name="mainLayout">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -16,8 +21,11 @@
         </Grid.ColumnDefinitions>
 
         <Canvas  AllowDrop="True" x:Name="canvas" Tag="canvas">
-            <Button Content="Clear" Grid.Column="0" Width="100" Height="50" Margin="500,1000,0,0" Click="ClearGraph"/>
+            <Button Content="Clear" Grid.Column="0" Width="100" Height="50" Click="ClearGraph" Canvas.Left="836" Canvas.Top="847"/>
         </Canvas>
-        <ScottPlot:WpfPlot Grid.Column="1" x:Name="plot"/>
+
+        <oxy:PlotView Model="{Binding Model}" Grid.Column="1" x:Name="plot">
+            
+        </oxy:PlotView>
     </Grid>
 </Window>
